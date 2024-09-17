@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-gray-800 p-4 shadow-md">
+    <nav className="bg-gray-900 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white font-bold text-xl flex flex-row">
           <Image src={logoIcon} alt="Logo" className="mx-auto mr-2 w-9 h-7" />
