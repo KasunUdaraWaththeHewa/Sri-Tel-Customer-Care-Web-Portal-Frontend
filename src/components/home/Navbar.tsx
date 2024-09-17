@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logoIcon from "@/assets/images/logoIconWhite.png";
 
 interface NavItem {
   label: string;
@@ -14,7 +16,7 @@ const navItems: NavItem[] = [
   { label: "Contact Us", href: "/contact" },
   {
     label: "Sign Up",
-    href: "/register",
+    href: "/api/register",
   },
 ];
 
@@ -28,7 +30,8 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-gray-900 p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="text-white font-bold text-xl">
+        <div className="text-white font-bold text-xl flex flex-row">
+          <Image src={logoIcon} alt="Logo" className="mx-auto mr-2 w-9 h-7" />
           <Link href="/">Sri-Tel</Link>
         </div>
 
