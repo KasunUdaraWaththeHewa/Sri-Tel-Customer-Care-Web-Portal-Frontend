@@ -1,7 +1,8 @@
 "use client";
 
 import { Card, Progress } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, RightOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 const ActivatedPackages = () => {
   const packages = [
@@ -10,8 +11,14 @@ const ActivatedPackages = () => {
     { name: 'AddOn - Roaming', balance: 'Enabled', percentage: 100, expiry: '2024-12-15', price: 'Rs.5' },
   ];
 
+  const calculateRemainingDays = (expiryDate: string) => {
+    const expiry = dayjs(expiryDate);
+    const today = dayjs();
+    return expiry.diff(today, 'day'); // Calculate difference in days
+  };
+
   return (
-    <div className="mt-7">
+    <div className="my-10">
       {/* Title and description */}
       <h2 className="text-5xl font-bold text-center text-gray-900 mb-2">Your Activated Packages</h2>
       <p className="text-lg text-gray-600 mb-6 text-center">
@@ -20,7 +27,9 @@ const ActivatedPackages = () => {
 
       {/* Grid for cards */}
       <div className="grid grid-flow-row lg:grid-cols-4 md:grid-cols-3 gap-y-5 gap-x-10">
-      {packages.map((pkg, index) => (
+      {packages.map((pkg, index) => {
+        const remainingDays = calculateRemainingDays(pkg.expiry);
+        return (
           <Card
             key={index}
             className="bg-white shadow-lg rounded-lg p-2"
@@ -49,14 +58,23 @@ const ActivatedPackages = () => {
             </div>
 
             {/* Expiry and View Details */}
-            <div className="text-center">
-              <p className="text-sm text-gray-500 mb-2">Expiry: {pkg.expiry}</p>
-              <a href={`/packages/${index}`} className="text-blue-500 underline text-sm font-medium">
-                View Details
+            <div className="text-center flex flex-row justify-between">
+              <p className="text-sm text-gray-500 mb-5 font-medium justify-start">
+                Expiry: {pkg.expiry}
+              </p>
+              <p className='text-sm text-red-400 mb-5 font-medium justify-end'>
+                {remainingDays} days remaining
+              </p>
+            </div>
+
+            <div className='flex flex-row justify-end mt-5'>
+              <a href={`/packages/${index}`} className="text-blue-500 text-xs font-medium align-middle justify-end hover:underline">
+                View Details <RightOutlined />
               </a>
             </div>
           </Card>
-        ))}
+        );
+        })}
         <Card
           className="bg-blue-50 shadow-lg rounded-lg p-4 flex justify-center items-center cursor-pointer border-2 border-gray-900 hover:bg-blue-100"
           style={{ height: 'auto' }}

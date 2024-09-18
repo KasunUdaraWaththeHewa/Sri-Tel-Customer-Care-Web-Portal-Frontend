@@ -7,3 +7,11 @@
     background: #111827 !important;
     color: white !important;
 }
+
+.ant-btn-icon-only :hover{
+    color: white !important;
+}
+
+.phoneNumber :hover{
+    color: white !important;
+}
