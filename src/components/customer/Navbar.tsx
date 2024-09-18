@@ -64,8 +64,8 @@ const Navbar: React.FC = () => {
         </div> */}
 
         <div className="flex items-center space-x-4">
-          <Button icon={<BellOutlined />} type="text" className="text-white hover:text-white" />
-          <Button icon={<UserOutlined />} type="text" className="text-white hover:text-white" />
+          <Button icon={<BellOutlined />} type="text" className="text-white hover:text-white"   />
+          <Button icon={<UserOutlined />} type="text" className="text-white hover:text-white" onClick={() => window.location.href = '/api/customer/profile'}/>
           <Dropdown overlay={accountMenu}>
             <Button type="text" className="text-white phoneNumber">
               0771234567 <DownOutlined />

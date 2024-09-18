@@ -9,7 +9,7 @@ const ProfilePage: React.FC = () => {
     email: "user@example.com",
     fullName: "John Doe",
     dateOfBirth: "1990-05-15",
-    phoneNumber: "+123456789",
+    phoneNumber: "0760578952",
     address: "123 Street, City, Country",
     nic: "123456789V",
     role: "Customer",

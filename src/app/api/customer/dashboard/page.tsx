@@ -10,6 +10,7 @@ import advertisement1 from '@/assets/images/advertisement1.png';
 import advertisement2 from '@/assets/images/advertisement2.jpg';
 import advertisement3 from '@/assets/images/advertisement3.png';
 import {Col, Row} from 'antd';
+import FloatingChatButton from '@/components/FloatingChatButton';
 
 const advertisements = [
   {
@@ -49,6 +50,7 @@ const Dashboard = () => {
         
         {/* <AdvertisementSection /> */}
       </div>
+      <FloatingChatButton />
       <Footer />
     </div>
   );

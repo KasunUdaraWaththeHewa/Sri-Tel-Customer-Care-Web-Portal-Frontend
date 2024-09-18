@@ -9,8 +9,8 @@ type SidebarProps = {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeMenu, onMenuClick }) => {
   return (
-    <div className="w-80 bg-gray-100 p-6 h-screen flex flex-col">
-      <div className="flex items-center mb-8">
+    <div className="w-80 bg-gray-100 p-6 h-auto flex flex-col">
+      <div className="flex items-center mb-5 bg-white p-3 rounded-lg">
         <Avatar size={64} icon={<UserOutlined />} className="mr-4" />
         <div>
           <h2 className="text-xl font-semibold">John Doe</h2>
@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeMenu, onMenuClick }) => {
       <Menu
         mode="vertical"
         selectedKeys={[activeMenu]}
-        className="flex-1"
+        className="flex-1 p-2 rounded-lg"
       >
         <Menu.Item
           key="profile-details"
