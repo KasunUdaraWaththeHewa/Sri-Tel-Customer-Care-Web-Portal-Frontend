@@ -1,13 +1,33 @@
-"use client"
+import React from 'react';
+import { Carousel } from 'antd';
 
-const AdvertisementSection = () => {
-    return (
-      <div className="mt-8 bg-yellow-200 p-4 rounded-lg text-center shadow-lg">
-        <h3 className="text-xl font-semibold text-dark-blue">Special Offer</h3>
-        <p className="text-gray-700">Get 50% off on roaming services this season!</p>
-      </div>
-    );
-  };
-  
-  export default AdvertisementSection;
-  
+type Advertisement = {
+  image: string;
+  title: string;
+};
+
+type AdvertisementCarouselProps = {
+  advertisements: Advertisement[];
+};
+
+const AdvertisementCarousel: React.FC<AdvertisementCarouselProps> = ({ advertisements }) => {
+  return (
+    <div className="border border-gray-200 rounded-xl max-w-[370px]">
+      <Carousel autoplay className="w-[500px] h-full">
+        {advertisements.map((ad, index) => (
+          <div key={index} className="flex flex-col items-center">
+            <div className="w-full h-auto relative">
+              <img 
+                src={ad.image} 
+                alt={ad.title} 
+                className="w-[500px] h-[600px] object-cover rounded-md" 
+              />
+            </div>
+          </div>
+        ))}
+      </Carousel>
+    </div>
+  );
+};
+
+export default AdvertisementCarousel;
