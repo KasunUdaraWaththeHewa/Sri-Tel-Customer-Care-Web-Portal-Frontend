@@ -1,12 +1,13 @@
 "use client";
 
-import { Form, Input, Button, DatePicker } from 'antd';
+import { Form, Input, Button, DatePicker, message } from 'antd';
 import Image from 'next/image';
 import logoImage from '@/assets/images/logoBlack.png';
 import registerImage from '@/assets/images/registerImage2.png'; // Replace with your desired image
 import Navbar from '@/components/home/Navbar';
 import Footer from '@/components/Footer';
 import React from 'react';
+import api from '@/api/api';  // Axios instance imported from api.ts
 
 interface RegistrationFormValues {
   fullName: string;
@@ -18,11 +19,31 @@ interface RegistrationFormValues {
   password: string;
 }
 
-
 const Registration = () => {
-  const onFinish = (values: RegistrationFormValues) => {
-    console.log('Received values of form: ', values);
-    // Perform registration logic here
+  const onFinish = async (values: RegistrationFormValues) => {
+    try {
+      console.log('Registration form values: ', values);
+      // Make API request to the signup endpoint
+      const response = await api.post('/user/signup', values);
+
+      console.log('Response from signup: ', response.data);
+
+      // Handle success response
+      if (response.data.success) {
+        message.success('Signup successful!');
+        // Optionally redirect to login page or some other page
+        setTimeout(() => {
+          window.location.href = '/api/login';
+        }, 2000);
+      } else {
+        // Handle failed signup
+        message.error(response.data.message || 'Signup failed!');
+      }
+    } catch (error) {
+      // Catch any errors and display appropriate message
+      message.error('Error occurred during signup. Please try again!');
+      console.error('Error during signup: ', error);
+    }
   };
 
   return (
