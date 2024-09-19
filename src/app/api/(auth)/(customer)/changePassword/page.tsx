@@ -8,6 +8,13 @@ import Navbar from '@/components/home/Navbar';
 import Footer from '@/components/Footer';
 import React from 'react';
 
+
+import api from '@/api/api'
+
+import { AxiosResponse, AxiosError } from 'axios';
+import { useRouter } from "next/router";
+
+
 interface ChangePasswordFormValues {
   email: string;
   currentPassword: string;
@@ -16,9 +23,21 @@ interface ChangePasswordFormValues {
 }
 
 const ChangePassword = () => {
+  const router = useRouter();
   const onFinish = (values: ChangePasswordFormValues) => {
     console.log('Received values of form: ', values);
     // Perform change password logic here
+    api.post('/auth/user/changepassword', values)
+      .then((res: AxiosResponse) => {
+        console.log(res);
+        // Redirect to login page or show success message
+        router.push({pathname: '/api/auth/login'})
+
+      })
+      .catch((error : AxiosError) => {
+        console.error(error);
+        // Show error message
+      });
   };
 
   return (
