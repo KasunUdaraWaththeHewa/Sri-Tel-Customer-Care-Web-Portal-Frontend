@@ -4,40 +4,40 @@ import React, { useState } from 'react';
 import { Card, Col, Row, Button, Select, Slider, Input } from 'antd';
 import Navbar from '@/components/customer/Navbar';
 import Footer from '@/components/Footer';
-import VoiceHeroBg from '@/components/customer/Dashboard/VoiceHero';
+import DataHero from '@/components/customer/Dashboard/DataHero';
 
 const { Option } = Select;
 const { Search } = Input;
 
-const VoicePackages: React.FC = () => {
+const DataPackages: React.FC = () => {
   const [filter, setFilter] = useState('all');
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const voicePackages = [
+  const dataPackages = [
     {
-      name: '7 Days Voice Package',
+      name: '7 Days Data Package',
       price: 126,
-      talktime: '1000',
-      features: ['Free S2S Calls', 'Free 10 S2S SMS', 'No Roaming'],
-      duration: '7',
+      dataAmount: 1000, // Amount in MB/GB
+      features: { freeSms: 'Free 10 SMS', roaming: 'No Roaming' },
+      durationInDays: 7,
       description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
     },
     {
-      name: '21 Days Voice Package',
+      name: '21 Days Data Package',
       price: 564,
-      talktime: '3000',
-      features: ['Free S2S Calls', 'Free 100 SMS to Any Network', 'No Roaming'],
-      duration: '21',
-      description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
+      dataAmount: 3000,
+      features: { freeSms: 'Free 100 SMS', roaming: 'No Roaming' },
+      durationInDays: 21,
+      description: 'Surf the internet for 21 days with 3000MB data and stay connected with SMS benefits.'
     },
     {
-      name: '30 Days Voice Package',
+      name: '30 Days Data Package',
       price: 923,
-      talktime: '6000',
-      features: ['Free S2S Calls', 'Free Unlimited SMS to Any Network', 'No Roaming'],
-      duration: '30',
-      description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
+      dataAmount: 6000,
+      features: { freeSms: 'Unlimited SMS', roaming: 'No Roaming' },
+      durationInDays: 30,
+      description: 'Get a full month of data with 6000MB, along with unlimited SMS and no roaming charges.'
     },
   ];
 
@@ -45,7 +45,6 @@ const VoicePackages: React.FC = () => {
     setPriceRange(value);
   };
 
-  // Increase or decrease the price range by 10
   const handleIncrease = () => {
     setPriceRange([priceRange[0], Math.min(priceRange[1] + 10, 1000)]);
   };
@@ -54,13 +53,16 @@ const VoicePackages: React.FC = () => {
     setPriceRange([priceRange[0], Math.max(priceRange[1] - 10, 0)]);
   };
 
-  // Handle filter by duration, price range, and search term in features
-  const filteredPackages = voicePackages.filter((pkg) => {
-    const matchesDuration = filter === 'all' || pkg.duration === filter;
+  // Handle filter by duration, price range, and search term in description or features
+  const filteredPackages = dataPackages.filter((pkg) => {
+    const matchesDuration = filter === 'all' || pkg.durationInDays === Number(filter);
     const matchesPrice = pkg.price >= priceRange[0] && pkg.price <= priceRange[1];
-    const matchesSearchTerm = searchTerm === '' || pkg.features.some((feature) =>
-      feature.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const matchesSearchTerm =
+      searchTerm === '' ||
+      pkg.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      Object.values(pkg.features).some((feature) =>
+        feature.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     return matchesDuration && matchesPrice && matchesSearchTerm;
   });
 
@@ -69,10 +71,10 @@ const VoicePackages: React.FC = () => {
       <Navbar />
       <div className="p-6">
         
-        <VoiceHeroBg/>
+        <DataHero />
 
-        <h1 className="text-5xl font-bold mb-4 text-center mt-10">Voice Packages</h1>
-        <p className="text-lg mb-8 text-center">Choose from our range of voice packages that suit your needs.</p>
+        <h1 className="text-5xl font-bold mb-4 text-center mt-10">Data Packages</h1>
+        <p className="text-lg mb-8 text-center">Choose from our range of data packages that suit your browsing needs.</p>
 
         {/* Filter Controls */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-5">
@@ -86,9 +88,9 @@ const VoicePackages: React.FC = () => {
               <Option value="30">30 Days</Option>
             </Select>
 
-            {/* Search by Features */}
+            {/* Search by Features or Description */}
             <Search
-              placeholder="Search features"
+              placeholder="Search by feature or description"
               onSearch={(value) => setSearchTerm(value)}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ width: 200 }}
@@ -113,7 +115,7 @@ const VoicePackages: React.FC = () => {
           </div>
         </div>
 
-        {/* Voice Package Cards */}
+        {/* Data Package Cards */}
         <Row gutter={[16, 16]}>
           {filteredPackages.length > 0 ? (
             filteredPackages.map((plan, index) => (
@@ -125,12 +127,12 @@ const VoicePackages: React.FC = () => {
                     <hr />
                     <p className="text-lg font-semibold mb-5 mt-2 text-center">Rs. {plan.price}</p>
                     <p className="text-gray-600 text-3xl text-center font-bold">
-                      {plan.talktime}
-                      <sub className="text-xs text-gray-400"> minutes</sub>
+                      {plan.dataAmount}
+                      <sub className="text-xs text-gray-400"> MB</sub>
                     </p>
-                    <p className="text-gray-400 mb-4 text-center text-xs">Talk Time to Any Network</p>
+                    <p className="text-gray-400 mb-4 text-center text-xs">Data Amount</p>
                     <ul className="list-disc ml-5 text-gray-600 mb-4 flex-grow">
-                      {plan.features.map((feature, i) => (
+                      {Object.values(plan.features).map((feature, i) => (
                         <li key={i}>{feature}</li>
                       ))}
                     </ul>
@@ -151,4 +153,4 @@ const VoicePackages: React.FC = () => {
   );
 };
 
-export default VoicePackages;
+export default DataPackages;
