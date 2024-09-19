@@ -15,10 +15,33 @@ interface ResetPasswordFormValues {
   confirmNewPassword: string;
 }
 
+import api  from "@/api/api";
+import {  AxiosError, AxiosResponse } from "axios";
+
+// Redirect
+import { useRouter } from "next/router";
+
 const ResetPassword = () => {
+
+  const router = useRouter();
+
   const onFinish = (values: ResetPasswordFormValues) => {
     console.log("Received values of form: ", values);
     // Perform reset password logic here
+
+    api
+      .post("/auth/user/resetpassword", values)
+      .then((res: AxiosResponse) => {
+        console.log(res);
+        // Redirect to login page or show success message
+        router.push({ pathname: "/api/auth/login"});
+
+      })
+      .catch((error: AxiosError) => {
+        console.error(error);
+        // Show error message
+      });
+
   };
 
   return (
