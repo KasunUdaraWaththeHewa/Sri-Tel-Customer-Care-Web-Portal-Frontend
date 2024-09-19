@@ -12,7 +12,7 @@ import React from 'react';
 import api from '@/api/api'
 
 import { AxiosResponse, AxiosError } from 'axios';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 
 interface ChangePasswordFormValues {
@@ -23,16 +23,19 @@ interface ChangePasswordFormValues {
 }
 
 const ChangePassword = () => {
-  // const router = useRouter();
+  const router = useRouter();
 
   const onFinish = (values: ChangePasswordFormValues) => {
+    router.push('/api/auth/login');
+
     console.log('Received values of form: ', values);
     // Perform change password logic here
     api.post('/auth/user/changepassword', values)
       .then((res: AxiosResponse) => {
         console.log(res);
         // Redirect to login page or show success message
-        // router.push({pathname: '/api/auth/login'})
+        router.push('/api/login');
+       
 
       })
       .catch((error : AxiosError) => {
