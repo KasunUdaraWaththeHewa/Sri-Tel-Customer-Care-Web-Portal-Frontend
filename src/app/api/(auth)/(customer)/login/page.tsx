@@ -1,12 +1,14 @@
 "use client";
 
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import logoImage from "@/assets/images/logoBlack.png";
 import loginImage from "@/assets/images/loginImage.jpg"; // Replace with your desired image
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/Footer";
+import api from '@/api/api';  // Axios instance imported from api.ts
+
 
 interface LoginFormValues {
   username: string;
@@ -14,10 +16,35 @@ interface LoginFormValues {
 }
 
 const Login = () => {
-  const onFinish = (values: LoginFormValues) => {
-    console.log("Received values of form: ", values);
-    // Perform login logic here
+  const onFinish = async (values: LoginFormValues) => {
+    console.log('Received values of form: ', values);
+    
+    try {
+      // Send login request to the BFF login endpoint
+      const response = await api.post('/user/login', values);
+
+      // Handle success response
+      if (response.data.success) {
+        message.success('Login successful!');
+        
+        // Store the token in localStorage (if needed for authenticated routes)
+        localStorage.setItem('token', response.data.data.token);
+
+        // Redirect to dashboard or another page
+        setTimeout(() => {
+          window.location.href = '/api/customer/dashboard';
+        }, 2000);
+      } else {
+        // Handle login failure
+        message.error(response.data.message || 'Login failed!');
+      }
+    } catch (error) {
+      // Handle any errors during the request
+      message.error('Error occurred during login. Please try again!');
+      console.error('Error during login: ', error);
+    }
   };
+
 
   return (
     <div className="flex flex-col min-h-screen">
