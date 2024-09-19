@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 
 const ResetPassword = () => {
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const onFinish = (values: ResetPasswordFormValues) => {
     console.log("Received values of form: ", values);
@@ -34,7 +34,7 @@ const ResetPassword = () => {
       .then((res: AxiosResponse) => {
         console.log(res);
         // Redirect to login page or show success message
-        router.push({ pathname: "/api/auth/login"});
+        // router.push({ pathname: "/api/auth/login"});
 
       })
       .catch((error: AxiosError) => {
