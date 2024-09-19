@@ -17,12 +17,12 @@ const DashboardCards = () => {
     {
       title: 'Voice Packages',
       icon: <PhoneOutlined />,
-      href: '/voice-packages',
+      href: '/api/customer/voice',
     },
     {
       title: 'Data Packages',
       icon: <WifiOutlined  />,
-      href: '/data-packages',
+      href: '/api/customer/data',
     },
   ];
 
