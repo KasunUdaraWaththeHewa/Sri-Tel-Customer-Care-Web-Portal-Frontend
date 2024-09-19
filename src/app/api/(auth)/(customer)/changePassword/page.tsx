@@ -8,8 +8,15 @@ import Navbar from '@/components/home/Navbar';
 import Footer from '@/components/Footer';
 import React from 'react';
 
+interface ChangePasswordFormValues {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 const ChangePassword = () => {
-  const onFinish = (values: any) => {
+  const onFinish = (values: ChangePasswordFormValues) => {
     console.log('Received values of form: ', values);
     // Perform change password logic here
   };
