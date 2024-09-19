@@ -52,3 +52,7 @@
     animation: pulse 2s infinite;
   }
   
+  :where(.css-dev-only-do-not-override-qnu6hi) .ant-btn-primary {
+    background: #111827 !important;
+    color: white !important;
+  }

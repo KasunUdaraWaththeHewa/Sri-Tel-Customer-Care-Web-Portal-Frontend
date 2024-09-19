@@ -12,9 +12,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Voice Packages", href: "/voice-packages" },
-  { label: "Data Packages", href: "/data-packages" },
-  { label: "Value Added Services", href: "/value-added-services" }
+  { label: "Back to Dashboard", href: "/api/customer/dashboard" },
+  { label: "Voice Packages", href: "/api/customer/voice" },
+  { label: "Data Packages", href: "/api/customer/data" },
+  { label: "Value Added Services", href: "/api/customer/vas" }
 ];
 
 const accountMenuItems = [
@@ -51,7 +52,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Desktop Menu */}
-        {/* <div className="hidden lg:flex space-x-4">
+        <div className="hidden lg:flex space-x-4">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -61,7 +62,7 @@ const Navbar: React.FC = () => {
               {item.label}
             </Link>
           ))}
-        </div> */}
+        </div>
 
         <div className="flex items-center space-x-4">
           <Button icon={<BellOutlined />} type="text" className="text-white hover:text-white"   />
