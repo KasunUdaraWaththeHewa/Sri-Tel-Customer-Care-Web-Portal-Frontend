@@ -1,16 +1,23 @@
 "use client";
 
-import { Form, Input, Button } from 'antd';
-import Image from 'next/image';
-import logoImage from '@/assets/images/logoBlack.png';
-import resetPasswordImage from '@/assets/images/changePasswordImage.jpg'; // Replace with your desired image
-import Navbar from '@/components/home/Navbar';
-import Footer from '@/components/Footer';
-import React from 'react';
+import { Form, Input, Button } from "antd";
+import Image from "next/image";
+import logoImage from "@/assets/images/logoBlack.png";
+import resetPasswordImage from "@/assets/images/changePasswordImage.jpg"; // Replace with your desired image
+import Navbar from "@/components/home/Navbar";
+import Footer from "@/components/Footer";
+import React from "react";
+
+interface ResetPasswordFormValues {
+  email: string;
+  otp: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
 
 const ResetPassword = () => {
-  const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+  const onFinish = (values: ResetPasswordFormValues) => {
+    console.log("Received values of form: ", values);
     // Perform reset password logic here
   };
 
@@ -32,16 +39,20 @@ const ResetPassword = () => {
           {/* Right side form */}
           <div className="w-full md:w-1/2 p-10 text-center">
             <div className="mb-5">
-              <Image src={logoImage} alt="Logo" width={80} height={80} className="mx-auto" />
+              <Image
+                src={logoImage}
+                alt="Logo"
+                width={80}
+                height={80}
+                className="mx-auto"
+              />
             </div>
             <h2 className="text-2xl font-semibold mb-2">Reset Password</h2>
-            <p className="text-gray-600 mb-5">Enter the OTP and your new password</p>
+            <p className="text-gray-600 mb-5">
+              Enter the OTP and your new password
+            </p>
 
-            <Form
-              name="resetPassword"
-              onFinish={onFinish}
-              layout="vertical"
-            >
+            <Form name="resetPassword" onFinish={onFinish} layout="vertical">
               <div className="grid grid-cols-2 gap-4">
                 {/* Email */}
                 <Form.Item
@@ -49,8 +60,8 @@ const ResetPassword = () => {
                   name="email"
                   className="col-span-2"
                   rules={[
-                    { required: true, message: 'Please enter your email!' },
-                    { type: 'email', message: 'Please enter a valid email!' },
+                    { required: true, message: "Please enter your email!" },
+                    { type: "email", message: "Please enter a valid email!" },
                   ]}
                 >
                   <Input placeholder="Email" size="large" />
@@ -61,7 +72,12 @@ const ResetPassword = () => {
                   label="OTP"
                   name="otp"
                   className="col-span-2"
-                  rules={[{ required: true, message: 'Please enter the OTP from your email!' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter the OTP from your email!",
+                    },
+                  ]}
                 >
                   <Input placeholder="Enter OTP" size="large" />
                 </Form.Item>
@@ -71,7 +87,12 @@ const ResetPassword = () => {
                   label="New Password"
                   name="newPassword"
                   className="col-span-2"
-                  rules={[{ required: true, message: 'Please enter your new password!' }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter your new password!",
+                    },
+                  ]}
                 >
                   <Input.Password placeholder="New Password" size="large" />
                 </Form.Item>
@@ -82,24 +103,36 @@ const ResetPassword = () => {
                   name="confirmNewPassword"
                   className="col-span-2"
                   rules={[
-                    { required: true, message: 'Please confirm your new password!' },
+                    {
+                      required: true,
+                      message: "Please confirm your new password!",
+                    },
                     // Add validation to check if new password and confirm password match
                     ({ getFieldValue }) => ({
                       validator(_, value) {
-                        if (!value || getFieldValue('newPassword') === value) {
+                        if (!value || getFieldValue("newPassword") === value) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error('The two passwords do not match!'));
+                        return Promise.reject(
+                          new Error("The two passwords do not match!")
+                        );
                       },
                     }),
                   ]}
                 >
-                  <Input.Password placeholder="Confirm New Password" size="large" />
+                  <Input.Password
+                    placeholder="Confirm New Password"
+                    size="large"
+                  />
                 </Form.Item>
               </div>
 
               <Form.Item>
-                <Button className="w-full bg-gray-900 border-none text-white" size="large" htmlType="submit">
+                <Button
+                  className="w-full bg-gray-900 border-none text-white"
+                  size="large"
+                  htmlType="submit"
+                >
                   Reset Password
                 </Button>
               </Form.Item>

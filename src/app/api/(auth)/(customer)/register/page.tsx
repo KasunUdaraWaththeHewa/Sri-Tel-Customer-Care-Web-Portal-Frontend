@@ -8,8 +8,19 @@ import Navbar from '@/components/home/Navbar';
 import Footer from '@/components/Footer';
 import React from 'react';
 
+interface RegistrationFormValues {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBirth: string; // If using a DatePicker, you might want to use moment.js or another date library
+  nic: string;
+  address: string;
+  password: string;
+}
+
+
 const Registration = () => {
-  const onFinish = (values: any) => {
+  const onFinish = (values: RegistrationFormValues) => {
     console.log('Received values of form: ', values);
     // Perform registration logic here
   };
