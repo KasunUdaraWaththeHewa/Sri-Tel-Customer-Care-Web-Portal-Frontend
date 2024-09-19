@@ -23,7 +23,8 @@ interface ChangePasswordFormValues {
 }
 
 const ChangePassword = () => {
-  const router = useRouter();
+  // const router = useRouter();
+
   const onFinish = (values: ChangePasswordFormValues) => {
     console.log('Received values of form: ', values);
     // Perform change password logic here
@@ -31,7 +32,7 @@ const ChangePassword = () => {
       .then((res: AxiosResponse) => {
         console.log(res);
         // Redirect to login page or show success message
-        router.push({pathname: '/api/auth/login'})
+        // router.push({pathname: '/api/auth/login'})
 
       })
       .catch((error : AxiosError) => {
