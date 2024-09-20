@@ -35,6 +35,7 @@ const ProfilePage: React.FC = () => {
     },
   });
 
+
   const handleMenuClick = (key: string) => {
     setActiveMenu(key);
     // Implement your navigation logic here
