@@ -1,6 +1,6 @@
 "use client";
 
-import { Form, Input, Button, Checkbox, message } from "antd";
+import { Form, Input, Button, Checkbox, message, Modal } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import logoImage from "@/assets/images/logoBlack.png";
@@ -8,14 +8,20 @@ import loginImage from "@/assets/images/loginImage.jpg"; // Replace with your de
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/Footer";
 import api from '@/api/api';  // Axios instance imported from api.ts
-
+import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 interface LoginFormValues {
-  username: string;
+  email: string;
   password: string;
 }
 
 const Login = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);  // State for showing/hiding modal
+  const [emailForReset, setEmailForReset] = useState("");  // State to hold email for password reset
+  const router = useRouter();
+
+
   const onFinish = async (values: LoginFormValues) => {
     console.log('Received values of form: ', values);
     
@@ -43,6 +49,38 @@ const Login = () => {
       message.error('Error occurred during login. Please try again!');
       console.error('Error during login: ', error);
     }
+  };
+
+  // Show Forgot Password Modal
+  const showForgotPasswordModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // Handle Forgot Password Modal submission
+  const handleForgotPasswordOk = async () => {
+    try {
+      // Send forgot password request to generate token and log it
+      const response = await api.post('/user/forgotpassword', { email: emailForReset });
+
+      if (response.data.success) {
+        message.success('Token generated! Redirecting to reset password...');
+        
+        router.push('/api/resetPassword');
+        
+        setIsModalVisible(false);  // Close the modal
+      } else {
+        message.error(response.data.message || 'Failed to generate token!');
+      }
+    } catch (error) {
+      console.error('Error during password reset: ', error);
+      message.error('Error occurred while generating token. Please try again!');
+    }
+  };
+
+
+  // Handle modal cancellation
+  const handleForgotPasswordCancel = () => {
+    setIsModalVisible(false);
   };
 
 
@@ -113,7 +151,7 @@ const Login = () => {
 
               <div className="flex justify-between items-center mb-4">
                 <Checkbox>Remember me</Checkbox>
-                <a href="#" className="text-sm text-gray-600">
+                <a onClick={showForgotPasswordModal} className="text-sm text-gray-600 cursor-pointer">
                   Forgot Password?
                 </a>
               </div>
@@ -140,6 +178,22 @@ const Login = () => {
         </div>
       </div>
       <Footer />
+   {/* Forgot Password Modal */}
+   <Modal
+        title="Forgot Password"
+        visible={isModalVisible}
+        onOk={handleForgotPasswordOk}
+        onCancel={handleForgotPasswordCancel}
+        okText="Generate OTP"
+        cancelText="Cancel"
+      >
+        <p>Enter your email to generate a reset OTP:</p>
+        <Input 
+          placeholder="Email" 
+          value={emailForReset} 
+          onChange={(e) => setEmailForReset(e.target.value)} 
+        />
+      </Modal>
     </div>
   );
 };

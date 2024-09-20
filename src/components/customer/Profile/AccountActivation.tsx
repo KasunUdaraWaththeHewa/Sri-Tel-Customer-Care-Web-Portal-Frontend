@@ -4,12 +4,15 @@ import React, { useState } from 'react';
 import { Button, Modal, Row, Col, Typography , message} from 'antd';
 import {jwtDecode} from "jwt-decode"; 
 import api from "@/api/api"; // Import Axios instance
+import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
+
 
 
 const { Text } = Typography;
 
 const ActivationBar: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const router = useRouter();
 
   // Function to show the deactivation modal
   const showDeactivateModal = () => {
@@ -34,20 +37,24 @@ const ActivationBar: React.FC = () => {
       const response = await api.put(`/user/deactivateAccount/${userId}`, {
         user_id: userId, // Include user_id in the body
       });
-      
-      if (response.data.success) {
-        message.success("Account deactivated successfully");
-        // Optionally: Update UI or redirect the user
-      } else {
-        message.error("Failed to deactivate account");
-      }
-    } catch (error) {
-      message.error("Error occurred while deactivating account");
-      console.error("Error:", error);
-    }
 
-    setIsModalVisible(false);
-  };
+      if (response.data.success) {
+      // If account deactivation is successful, remove token and log out the user
+      localStorage.removeItem('token');
+      message.success("Account deactivated successfully. You have been logged out.");
+
+      // Redirect to the login page after successful deactivation
+      router.push("/api/login");
+    } else {
+      message.error("Failed to deactivate account");
+    }
+  } catch (error) {
+    message.error("Error occurred while deactivating account");
+    console.error("Error:", error);
+  }
+
+  setIsModalVisible(false);
+};
 
   // Function to cancel the deactivation
   const handleCancel = () => {
