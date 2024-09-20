@@ -1,51 +1,50 @@
 "use client";
 
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, message } from "antd";
 import Image from "next/image";
 import logoImage from "@/assets/images/logoBlack.png";
 import resetPasswordImage from "@/assets/images/changePasswordImage.jpg"; // Replace with your desired image
 import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/Footer";
 import React from "react";
+import api from "@/api/api";
+import { AxiosError, AxiosResponse } from "axios";
+import { useRouter } from "next/navigation";
 
 interface ResetPasswordFormValues {
   email: string;
-  otp: string;
+  resetToken: string;
   newPassword: string;
-  confirmNewPassword: string;
 }
 
-import api  from "@/api/api";
-import {  AxiosError, AxiosResponse } from "axios";
-
-// Redirect
-import { useRouter } from "next/navigation";
-
 const ResetPassword = () => {
-
-  // const router = useRouter();
-
   const router = useRouter();
-
 
   const onFinish = (values: ResetPasswordFormValues) => {
     console.log("Received values of form: ", values);
-    // Perform reset password logic here
-
+    
+    // Make API request for reset password
     api
-      .post("/auth/user/resetpassword", values)
+      .post("/user/resetpassword", values) // Corrected API path
       .then((res: AxiosResponse) => {
         console.log(res);
-        // Redirect to login page or show success message
-        router.push("/api/login");
-
+        if (res.data.success) {
+          // Show success message
+          message.success("Password reset successful! Please log in.");
+          
+          // Redirect to login page
+          router.push("/api/login"); // Redirect to the correct login page
+        } else {
+          message.error(res.data.message || "Failed to reset password.");
+        }
       })
       .catch((error: AxiosError) => {
         console.error(error);
         // Show error message
+        message.error("An error occurred while resetting the password.");
       });
-
   };
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -96,7 +95,7 @@ const ResetPassword = () => {
                 {/* OTP */}
                 <Form.Item
                   label="OTP"
-                  name="otp"
+                  name="resetToken"
                   className="col-span-2"
                   rules={[
                     {
