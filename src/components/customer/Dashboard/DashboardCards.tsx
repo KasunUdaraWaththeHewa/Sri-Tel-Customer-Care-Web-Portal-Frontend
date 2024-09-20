@@ -29,16 +29,16 @@ const DashboardCards = () => {
   const vasMenu = (
     <Menu>
       <Menu.Item key="1" icon={<PlusCircleOutlined />}>
-        <a href="/vas/add-ons" className='text-base font-semibold'>AddOns</a>
+        <a href="/api/customer/vas/topUpPackages" className='text-base font-semibold'>AddOns</a>
       </Menu.Item>
       <Menu.Item key="2" icon={<GlobalOutlined />}>
-        <a href="/vas/roaming" className='text-base font-semibold'>Roaming</a>
+        <a href="/api/customer/vas/roaming" className='text-base font-semibold'>Roaming</a>
       </Menu.Item>
       <Menu.Item key="3" icon={<TagsOutlined />}>
-        <a href="/vas/subscriptions" className='text-base font-semibold'>Subscriptions</a>
+        <a href="/api/customer/vas/subscriptionPackages" className='text-base font-semibold'>Subscriptions</a>
       </Menu.Item>
       <Menu.Item key="4" icon={<SoundOutlined />}>
-        <a href="/vas/ringing-tones" className='text-base font-semibold'>Ringing Tones</a>
+        <a href="/api/customer/vas/ringingTones" className='text-base font-semibold'>Ringing Tones</a>
       </Menu.Item>
     </Menu>
   );
