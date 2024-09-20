@@ -56,9 +56,21 @@ const ManageConnections: React.FC = () => {
               <div className="text-gray-600">Email Address: {account.email}</div>
               <div className="text-gray-600">Account Type: {account.accountType}</div>
             </Col>
-            <Col span={3} className='flex flex-row'>
+            <Col span={3} className='flex flex-col'>
+              <div className='flex flex-row'>
                 <div className={`w-3 h-3 rounded-full ${account.status == 'Active' ? 'bg-green-600' : 'bg-red-600'} mr-2 my-auto`} />
                 <div className= {`${account.status == 'Active' ? 'text-green-600' : 'text-red-600'} font-semibold`}>{account.status}</div>
+              </div>
+              <div>
+                <Button
+                  type="primary"
+                  className={`${account.status === 'Active' ? 'bg-red-500' : 'bg-green-500'} text-white mt-2`}
+                  size='small'
+                >
+                  {account.status === 'Active'? 'Deactivate' : 'Activate'}
+                </Button>
+              </div>
+                
             </Col>
           </Row>
         </Card>
