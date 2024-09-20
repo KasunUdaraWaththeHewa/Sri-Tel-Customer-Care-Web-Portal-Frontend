@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/customer/Navbar";
 import CustomerDetails from "@/components/customer/Profile/CustomerDetails";
 import Sidebar from "@/components/customer/Profile/SideBar";
@@ -10,6 +11,7 @@ import ActivationBar from "@/components/customer/Profile/AccountActivation";
 import ManageConnections from "@/components/customer/Profile/ManageConnections";
 import FAQ from "@/components/customer/Profile/FaqSection";
 import FloatingChatButton from "@/components/FloatingChatButton";
+import { message } from "antd"; // Import Ant Design notification component
 
 const ProfilePage: React.FC = () => {
   const [activeMenu, setActiveMenu] = useState("profile-details");
@@ -38,6 +40,7 @@ const ProfilePage: React.FC = () => {
     // Implement your navigation logic here
   };
 
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <div className="sticky top-0 z-50">
@@ -63,4 +66,6 @@ const ProfilePage: React.FC = () => {
   );
 };
 
+
 export default ProfilePage;
+
