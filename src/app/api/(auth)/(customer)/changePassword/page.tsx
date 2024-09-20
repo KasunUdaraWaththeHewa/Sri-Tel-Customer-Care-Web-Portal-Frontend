@@ -1,19 +1,15 @@
 "use client";
 
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import Image from 'next/image';
 import logoImage from '@/assets/images/logoBlack.png';
 import changePasswordImage from '@/assets/images/changePasswordImage.jpg'; // Replace with your desired image
 import Navbar from '@/components/home/Navbar';
 import Footer from '@/components/Footer';
 import React from 'react';
-
-
-import api from '@/api/api'
-
+import api from '@/api/api'; // Axios instance
 import { AxiosResponse, AxiosError } from 'axios';
 import { useRouter } from "next/navigation";
-
 
 interface ChangePasswordFormValues {
   email: string;
@@ -26,21 +22,24 @@ const ChangePassword = () => {
   const router = useRouter();
 
   const onFinish = (values: ChangePasswordFormValues) => {
-    router.push('/api/auth/login');
-
     console.log('Received values of form: ', values);
-    // Perform change password logic here
-    api.post('/auth/user/changepassword', values)
+    
+    // Make API request to change password
+    api.post('/user/changepassword', values)  // Updated to /user/changepassword
       .then((res: AxiosResponse) => {
         console.log(res);
-        // Redirect to login page or show success message
-        router.push('/api/login');
-       
-
+        if (res.data.success) {
+          // Show success message and redirect to login page
+          message.success("Password changed successfully, please log in again.");
+          router.push('/api/login'); // Redirect to login page
+        } else {
+          // Handle failure response
+          message.error(res.data.message || "Failed to change password");
+        }
       })
-      .catch((error : AxiosError) => {
+      .catch((error: AxiosError) => {
         console.error(error);
-        // Show error message
+        message.error("An error occurred while changing the password.");
       });
   };
 

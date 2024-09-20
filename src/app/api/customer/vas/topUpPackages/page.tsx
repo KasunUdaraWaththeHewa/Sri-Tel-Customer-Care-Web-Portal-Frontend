@@ -4,40 +4,36 @@ import React, { useState } from 'react';
 import { Card, Col, Row, Button, Select, Slider, Input } from 'antd';
 import Navbar from '@/components/customer/Navbar';
 import Footer from '@/components/Footer';
-import VoiceHeroBg from '@/components/customer/Packages/VoiceHero';
+import TopUpHero from '@/components/customer/Packages/TopUpHero';
 
 const { Option } = Select;
 const { Search } = Input;
 
-const VoicePackages: React.FC = () => {
-  const [filter, setFilter] = useState('all');
+const TopUpPackages: React.FC = () => {
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const voicePackages = [
+  const topUpPackages = [
     {
-      name: '7 Days Voice Package',
-      price: 126,
-      talktime: '1000',
-      features: ['Free S2S Calls', 'Free 10 S2S SMS', 'No Roaming'],
-      duration: '7',
-      description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
+      name: 'Basic TopUp',
+      price: 50,
+      creditAmount: 50,
+      features: { freeSms: '5 Free SMS', callRate: 'Rs. 2.50 per minute' },
+      description: 'Recharge with our basic TopUp and stay connected for calls and texts at affordable rates.',
     },
     {
-      name: '21 Days Voice Package',
-      price: 564,
-      talktime: '3000',
-      features: ['Free S2S Calls', 'Free 100 SMS to Any Network', 'No Roaming'],
-      duration: '21',
-      description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
+      name: 'Standard TopUp',
+      price: 100,
+      creditAmount: 100,
+      features: { freeSms: '15 Free SMS', callRate: 'Rs. 2.00 per minute' },
+      description: 'Get extra talk time with our Standard TopUp package. Ideal for regular users.',
     },
     {
-      name: '30 Days Voice Package',
-      price: 923,
-      talktime: '6000',
-      features: ['Free S2S Calls', 'Free Unlimited SMS to Any Network', 'No Roaming'],
-      duration: '30',
-      description: 'Enjoy a week of seamless browsing with 1000MB data and additional benefits.'
+      name: 'Premium TopUp',
+      price: 500,
+      creditAmount: 550,
+      features: { freeSms: 'Unlimited Free SMS', callRate: 'Rs. 1.50 per minute' },
+      description: 'Premium TopUp package with bonus credit and unlimited SMS for maximum savings.',
     },
   ];
 
@@ -45,7 +41,6 @@ const VoicePackages: React.FC = () => {
     setPriceRange(value);
   };
 
-  // Increase or decrease the price range by 10
   const handleIncrease = () => {
     setPriceRange([priceRange[0], Math.min(priceRange[1] + 10, 1000)]);
   };
@@ -54,14 +49,16 @@ const VoicePackages: React.FC = () => {
     setPriceRange([priceRange[0], Math.max(priceRange[1] - 10, 0)]);
   };
 
-  // Handle filter by duration, price range, and search term in features
-  const filteredPackages = voicePackages.filter((pkg) => {
-    const matchesDuration = filter === 'all' || pkg.duration === filter;
+  // Handle filter by duration, price range, and search term in description or features
+  const filteredPackages = topUpPackages.filter((pkg) => {
     const matchesPrice = pkg.price >= priceRange[0] && pkg.price <= priceRange[1];
-    const matchesSearchTerm = searchTerm === '' || pkg.features.some((feature) =>
-      feature.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    return matchesDuration && matchesPrice && matchesSearchTerm;
+    const matchesSearchTerm =
+      searchTerm === '' ||
+      pkg.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      Object.values(pkg.features).some((feature) =>
+        feature.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    return matchesPrice && matchesSearchTerm;
   });
 
   return (
@@ -69,26 +66,18 @@ const VoicePackages: React.FC = () => {
       <Navbar />
       <div className="p-6">
         
-        <VoiceHeroBg/>
+        <TopUpHero />
 
-        <h1 className="text-5xl font-bold mb-4 text-center mt-10">Voice Packages</h1>
-        <p className="text-lg mb-8 text-center">Choose from our range of voice packages that suit your needs.</p>
+        <h1 className="text-5xl font-bold mb-4 text-center mt-10">TopUp Packages</h1>
+        <p className="text-lg mb-8 text-center">Select from our range of TopUp packages that offer great value for staying connected.</p>
 
         {/* Filter Controls */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-5">
-          {/* Left side: Duration Filter and Search bar */}
+          {/* Left side: Price Range Filter and Search bar */}
           <div className="flex items-center space-x-4">
-            {/* Duration Filter */}
-            <Select defaultValue="all" style={{ width: 200 }} onChange={(value) => setFilter(value)}>
-              <Option value="all">All Durations</Option>
-              <Option value="7">7 Days</Option>
-              <Option value="21">21 Days</Option>
-              <Option value="30">30 Days</Option>
-            </Select>
-
-            {/* Search by Features */}
+            {/* Search by Features or Description */}
             <Search
-              placeholder="Search features"
+              placeholder="Search by feature or description"
               onSearch={(value) => setSearchTerm(value)}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ width: 200 }}
@@ -113,7 +102,7 @@ const VoicePackages: React.FC = () => {
           </div>
         </div>
 
-        {/* Voice Package Cards */}
+        {/* TopUp Package Cards */}
         <Row gutter={[16, 16]}>
           {filteredPackages.length > 0 ? (
             filteredPackages.map((plan, index) => (
@@ -125,18 +114,18 @@ const VoicePackages: React.FC = () => {
                     <hr />
                     <p className="text-lg font-semibold mb-5 mt-2 text-center">Rs. {plan.price}</p>
                     <p className="text-gray-600 text-3xl text-center font-bold">
-                      {plan.talktime}
-                      <sub className="text-xs text-gray-400"> minutes</sub>
+                      {plan.creditAmount}
+                      <sub className="text-xs text-gray-400"> Rs</sub>
                     </p>
-                    <p className="text-gray-400 mb-4 text-center text-xs">Talk Time to Any Network</p>
+                    <p className="text-gray-400 mb-4 text-center text-xs">Credit Amount</p>
                     <ul className="list-disc ml-5 text-gray-600 mb-4 flex-grow">
-                      {plan.features.map((feature, i) => (
+                      {Object.values(plan.features).map((feature, i) => (
                         <li key={i}>{feature}</li>
                       ))}
                     </ul>
                   </div>
                   <div className="justify-self-end align-bottom">
-                    <Button type="primary" className="w-full bg-gray-900">Activate</Button>
+                    <Button type="primary" className="w-full bg-gray-900">Recharge</Button>
                   </div>
                 </Card>
               </Col>
@@ -151,4 +140,4 @@ const VoicePackages: React.FC = () => {
   );
 };
 
-export default VoicePackages;
+export default TopUpPackages;

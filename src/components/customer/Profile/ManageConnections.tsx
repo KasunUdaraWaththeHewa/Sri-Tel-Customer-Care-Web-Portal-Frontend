@@ -1,26 +1,56 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Card, Button, Input, Select, Row, Col, Typography, Form } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Button, Input, Select, Row, Col, Typography, Form, message } from 'antd';
+import api from '@/api/api'; // Axios instance for API calls
+import jwtDecode from 'jwt-decode'; // To decode JWT token
 
 const { Text } = Typography;
 const { Option } = Select;
 
 interface Account {
-  phoneNumber: string;
+  number: string;
   email: string;
   accountType: string;
   status: string;
+  _id: string;
 }
 
 const ManageConnections: React.FC = () => {
-  const [accounts, setAccounts] = useState<Account[]>([
-    { phoneNumber: "0761234567", email: "john.doe@example.com", accountType: "Prepaid", status: "Active" },
-    { phoneNumber: "0772345678", email: "jane.doe@example.com", accountType: "Postpaid", status: "Inactive" },
-  ]);
-
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [newAccount, setNewAccount] = useState({ phoneNumber: '', email: '', accountType: 'Prepaid', status:'Active' });
+  const [newAccount, setNewAccount] = useState({ number: '', email: '', accountType: '', status: 'Active' });
+
+  // Fetch all accounts when the component mounts
+  useEffect(() => {
+    const fetchAccounts = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          message.error("Token not found. Please log in again.");
+          return;
+        }
+
+        // Send a GET request to fetch all accounts for the user
+        const response = await api.get(`/customer/`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (response.data.success) {
+          setAccounts(response.data.data);
+        } else {
+          message.error(response.data.message || 'Failed to fetch accounts');
+        }
+      } catch (error) {
+        console.error('Error fetching accounts:', error);
+        message.error('An error occurred while fetching accounts');
+      }
+    };
+
+    fetchAccounts();
+  }, []);
 
   const handleAddNewClick = () => {
     setShowForm(!showForm);
@@ -35,30 +65,130 @@ const ManageConnections: React.FC = () => {
     setNewAccount(prev => ({ ...prev, accountType: value }));
   };
 
-  const handleFormSubmit = () => {
-    // Add logic to submit form and create a new account
-    setAccounts([...accounts, newAccount]);
-    setNewAccount({ phoneNumber: '', email: '', accountType: 'Prepaid', status: 'Active' });
-    setShowForm(false);
+  const handleFormSubmit = async () => {
+    try {
+      // Get the token from local storage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        message.error("Token not found. Please log in again.");
+        return;
+      }
+
+      // Decode the token to get the user ID
+      const decodedToken: any = jwtDecode(token);
+      const userId = decodedToken._id;
+
+      // Prepare account data with the userId
+      const accountData = {
+        ...newAccount,
+        userID: userId,
+      };
+
+      // Send a POST request to add the new account
+      const response = await api.post('/customer/', accountData, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.data.success) {
+        message.success('Account added successfully!');
+        setAccounts([...accounts, response.data.data]);
+        setNewAccount({ number: '', email: '', accountType: '', status: 'Active' });
+        setShowForm(false);
+      } else {
+        message.error(response.data.message || 'Failed to add account');
+      }
+    } catch (error) {
+      console.error('Error adding account:', error);
+      message.error('An error occurred while adding the account');
+    }
   };
 
-    
+  // Function to handle account activation
+  const handleActivate = async (accountID: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        message.error("Token not found. Please log in again.");
+        return;
+      }
+
+      const response = await api.post('/customer/activate', { accountID }, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.data.success) {
+        message.success('Account activated successfully!');
+        // Update the account status locally after activation
+        setAccounts(accounts.map(account => account._id === accountID ? { ...account, status: 'Active' } : account));
+      } else {
+        message.error(response.data.message || 'Failed to activate account');
+      }
+    } catch (error) {
+      console.error('Error activating account:', error);
+      message.error('An error occurred while activating the account');
+    }
+  };
+
+  // Function to handle account deactivation
+  const handleDeactivate = async (accountID: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        message.error("Token not found. Please log in again.");
+        return;
+      }
+
+      const response = await api.post('/customer/deactivate', { accountID }, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if (response.data.success) {
+        message.success('Account deactivated successfully!');
+        // Update the account status locally after deactivation
+        setAccounts(accounts.map(account => account._id === accountID ? { ...account, status: 'Inactive' } : account));
+      } else {
+        message.error(response.data.message || 'Failed to deactivate account');
+      }
+    } catch (error) {
+      console.error('Error deactivating account:', error);
+      message.error('An error occurred while deactivating the account');
+    }
+  };
 
   return (
     <div className="bg-gray-50 p-6 rounded-lg">
       <h1 className="text-3xl font-bold mb-4">Your Connections</h1>
-      
+
+      {/* Display All Accounts */}
       {accounts.map((account, index) => (
         <Card className="mb-4" key={index}>
           <Row justify="space-between" align="middle">
             <Col span={20}>
-              <Text className="text-lg font-bold">Phone Number: {account.phoneNumber}</Text>
+              <Text className="text-lg font-bold">Phone Number: {account.number}</Text>
               <div className="text-gray-600">Email Address: {account.email}</div>
               <div className="text-gray-600">Account Type: {account.accountType}</div>
             </Col>
-            <Col span={3} className='flex flex-row'>
+            <Col span={3} className='flex flex-col'>
+              <div className='flex flex-row'>
                 <div className={`w-3 h-3 rounded-full ${account.status == 'Active' ? 'bg-green-600' : 'bg-red-600'} mr-2 my-auto`} />
                 <div className= {`${account.status == 'Active' ? 'text-green-600' : 'text-red-600'} font-semibold`}>{account.status}</div>
+              </div>
+              <div>
+                <Button
+                  type="primary"
+                  className={`${account.status === 'Active' ? 'bg-red-500' : 'bg-green-500'} text-white mt-2`}
+                  size='small'
+                  onClick={() => account.status === 'Active' ? handleDeactivate(account._id) : handleActivate(account._id)}
+                >
+                  {account.status === 'Active' ? 'Deactivate' : 'Activate'}
+                </Button>
+              </div>
             </Col>
           </Row>
         </Card>
@@ -86,8 +216,8 @@ const ManageConnections: React.FC = () => {
             </Form.Item>
             <Form.Item label="New Phone Number" required>
               <Input
-                name="phoneNumber"
-                value={newAccount.phoneNumber}
+                name="number"
+                value={newAccount.number}
                 onChange={handleInputChange}
                 placeholder="Enter new phone number"
                 size='large'
@@ -99,8 +229,8 @@ const ManageConnections: React.FC = () => {
                 onChange={handleAccountTypeChange}
                 size='large'
               >
-                <Option value="Prepaid" size='large'>Prepaid</Option>
-                <Option value="Postpaid" size='large'>Postpaid</Option>
+                <Option value="Prepaid">Prepaid</Option>
+                <Option value="Postpaid">Postpaid</Option>
               </Select>
             </Form.Item>
             <Button type="primary" htmlType="submit" size='large' className='bg-green-900'>

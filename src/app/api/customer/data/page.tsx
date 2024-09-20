@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Card, Col, Row, Button, Select, Slider, Input } from 'antd';
 import Navbar from '@/components/customer/Navbar';
 import Footer from '@/components/Footer';
-import DataHero from '@/components/customer/Dashboard/DataHero';
+import DataHero from '@/components/customer/Packages/DataHero';
 
 const { Option } = Select;
 const { Search } = Input;

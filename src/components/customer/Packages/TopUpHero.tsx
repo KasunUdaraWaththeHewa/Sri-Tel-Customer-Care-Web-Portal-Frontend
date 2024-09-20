@@ -1,9 +1,9 @@
 import React from "react";
 import { Button } from "antd";
 import Image from "next/image";
-import heroImage from "@/assets/images/dataHeroBg1.jpg"; // Replace with your image path
+import heroImage from "@/assets/images/topUpBarImage.jpg"; // Replace with your image path
 
-const DataHero: React.FC = () => {
+const TopUpHero: React.FC = () => {
   return (
     <div className="relative w-full h-[500px]"> {/* Increased overall height */}
       <section
@@ -18,16 +18,16 @@ const DataHero: React.FC = () => {
         {/* Text Content */}
         <div className="relative z-10 flex flex-col justify-center items-start h-full p-8 pr-16 text-left">
           <h1 className="text-6xl font-bold mb-4 leading-tight max-w-[600px]">
-            Browse Our Data Packages
+            Flexible TopUp Packages for Every Need
           </h1>
           <p className="text-base mb-6 leading-relaxed max-w-[500px]">
-            Whether you're a light browser or a data-hungry streamer, our selection of data packages has something for everyone. 
+            Stay in control of your mobile usage with our flexible and affordable TopUp packages. Whether you need a quick recharge or a larger balance, our plans are designed to keep you connected anytime, anywhere.
           </p>
           <div className="flex flex-row space-x-5">
-            <Button type="primary" size="large" className="bg-white border-white text-black">
-             Explore Packages
+            <Button type="primary" size="large" className="bg-gray-950 text-white">
+                Recharge Now
             </Button>
-            <Button type="default" size="large" className="bg-slate-950 border-white text-white">
+            <Button type="default" size="large" className="bg-transparent text-white border border-white">
               Learn More
             </Button>
           </div>
@@ -37,4 +37,4 @@ const DataHero: React.FC = () => {
   );
 };
 
-export default DataHero;
+export default TopUpHero;
