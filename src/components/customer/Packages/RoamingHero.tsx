@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "antd";
-import Image from "next/image";
+// import Image from "next/image";
 import heroImage from "@/assets/images/roamingBarImage.jpg"; // Replace with your image path
 
 const RoamingHero: React.FC = () => {
@@ -21,7 +21,7 @@ const RoamingHero: React.FC = () => {
             Global Roaming Services for Travelers
           </h1>
           <p className="text-base mb-6 leading-relaxed max-w-[500px]">
-            Traveling abroad? Our roaming packages ensure you stay connected without breaking the bank. Get the best deals on calls, texts, and data when you're on the go internationally.
+            Traveling abroad? Our roaming packages ensure you stay connected without breaking the bank. Get the best deals on calls, texts, and data when you`re on the go internationally.
           </p>
           <div className="flex flex-row space-x-5">
             <Button type="primary" size="large" className="bg-gray-950 text-white">

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "antd";
-import Image from "next/image";
+// import Image from "next/image";
 import heroImage from "@/assets/images/dataHeroBg1.jpg"; // Replace with your image path
 
 const DataHero: React.FC = () => {
@@ -21,7 +21,7 @@ const DataHero: React.FC = () => {
             Browse Our Data Packages
           </h1>
           <p className="text-base mb-6 leading-relaxed max-w-[500px]">
-            Whether you're a light browser or a data-hungry streamer, our selection of data packages has something for everyone. 
+            Whether you`re a light browser or a data-hungry streamer, our selection of data packages has something for everyone. 
           </p>
           <div className="flex flex-row space-x-5">
             <Button type="primary" size="large" className="bg-gray-950 text-white">
