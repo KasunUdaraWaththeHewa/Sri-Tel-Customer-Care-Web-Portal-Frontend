@@ -187,7 +187,7 @@ const ActivatedPackages = () => {
                     <ul className="list-disc list-inside text-sm text-gray-600">
                       {Object.entries(pkg.features).map(([key, value]) => (
                         <li key={key}>
-                          {key}: {value}
+                          {value}
                         </li>
                       ))}
                     </ul>
