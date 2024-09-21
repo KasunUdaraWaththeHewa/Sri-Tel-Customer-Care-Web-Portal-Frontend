@@ -21,6 +21,9 @@ interface Package {
   dataAmount?: number; // Data packages and top-ups
   voiceMinutes?: number; // Voice packages
   toneId?: string; // For Ring Tone packages
+  toneDescription?: string; // For Ring Tone packages
+  description?: string; // For subscriptions
+  features?: { [key: string]: string | number | boolean };
 }
 
 const ActivatedPackages = () => {
@@ -106,39 +109,90 @@ const ActivatedPackages = () => {
                 {/* Price and specific fields */}
                 <div className="text-center flex flex-row justify-between mb-5">
                   {pkg.dataAmount && (
-                    <p className="text-sm font-semibold text-gray-700 text-left">
-                      Data: {pkg.dataAmount} MB
+                    <p className="text-sm text-gray-700 text-left">
+                      <span className="text-sm font-semibold text-gray-700">
+                        Data:
+                      </span>{" "}
+                      {pkg.dataAmount} MB
                     </p>
                   )}
                   {pkg.voiceMinutes && (
-                    <p className="text-sm font-semibold text-gray-700 text-left">
-                      Minutes: {pkg.voiceMinutes}
+                    <p className="text-sm text-gray-700 text-left">
+                      <span className="text-sm font-semibold text-gray-700">
+                        Minutes:
+                      </span>{" "}
+                      {pkg.voiceMinutes}
                     </p>
                   )}
                   {pkg.balance && (
-                    <p className="text-sm font-semibold text-gray-700 text-left">
-                      Balance: {pkg.balance}
+                    <p className="text-sm text-gray-700 text-left">
+                      <span className="text-sm font-semibold text-gray-700">
+                        Balance:
+                      </span>{" "}
+                      {pkg.balance}
                     </p>
                   )}
                   {pkg.toneId && (
-                    <p className="text-sm font-semibold text-gray-700 text-left">
-                      Tone Name: {pkg.packageName}
+                    <p className="text-sm text-gray-700 text-left">
+                      <span className="text-sm font-semibold text-gray-700">
+                        Tone Name:
+                      </span>{" "}
+                      {pkg.packageName}
                     </p>
                   )}
-                  <p className="text-sm text-gray-500 text-right">
-                    Price: {pkg.price}
+                  <p className="text-sm text-gray-700 text-right">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Price:
+                    </span>{" "}
+                    {pkg.price}
                   </p>
                 </div>
 
                 {/* Expiry and Remaining Days */}
                 <div className="text-center flex flex-row justify-between">
-                  <p className="text-sm text-gray-500 mb-5 font-medium">
-                    Expiry: {formatExpiryDate(pkg.expiryDate)}
+                  <p className="text-sm text-gray-700 mb-2 mb-5">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Expiry:
+                    </span>{" "}
+                    {formatExpiryDate(pkg.expiryDate)}
                   </p>
                   <p className="text-sm text-red-400 mb-5 font-medium">
                     {remainingDays} days remaining
                   </p>
                 </div>
+
+                {/* Description */}
+                {pkg.description && (
+                  <p className="text-sm text-gray-700 mb-2">
+                    <span className="text-sm font-semibold text-gray-700">
+                      Description:
+                    </span>{" "}
+                    {pkg.description}
+                  </p>
+                )}
+
+                {/* Tone Description */}
+                {pkg.toneDescription && (
+                  <p className="text-sm text-gray-700 mb-2">
+                    Tone Description: {pkg.toneDescription}
+                  </p>
+                )}
+
+                {/* Features */}
+                {pkg.features && (
+                  <div className="mb-2">
+                    <p className="text-sm text-gray-700 font-semibold">
+                      Features:
+                    </p>
+                    <ul className="list-disc list-inside text-sm text-gray-600">
+                      {Object.entries(pkg.features).map(([key, value]) => (
+                        <li key={key}>
+                          {key}: {value}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* View Details Link */}
                 <div className="flex flex-row justify-end mt-5">
