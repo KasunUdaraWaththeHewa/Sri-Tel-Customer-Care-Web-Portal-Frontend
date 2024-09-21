@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Button, Slider, Input, message } from "antd";
 import Navbar from "@/components/customer/Navbar";
 import Footer from "@/components/Footer";
-import SubscriptionHero from "@/components/customer/Packages/TopUpHero";
+import SubscriptionHero from "@/components/customer/Packages/SubscriptionHero";
 
 import {
   getAllSubscriptionPackages,

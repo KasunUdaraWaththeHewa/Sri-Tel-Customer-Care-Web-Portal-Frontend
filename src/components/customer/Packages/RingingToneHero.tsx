@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "antd";
-import Image from "next/image";
+// import Image from "next/image";
 import heroImage from "@/assets/images/ringingToneBarImage.jpg"; // Replace with your image path
 
 const RingingToneHero: React.FC = () => {
