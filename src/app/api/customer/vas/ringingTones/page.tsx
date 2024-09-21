@@ -1,55 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
-import { Card, Col, Row, Button, Select, Input } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Col, Row, Button, Input, message } from "antd";
 import Navbar from "@/components/customer/Navbar";
 import Footer from "@/components/Footer";
 import RingingToneHero from "@/components/customer/Packages/RingingToneHero";
+import {
+  getAllRingTonePackages,
+  activateRingTonePackage,
+} from "@/app/api/apiCalls/ringTonePackages"; // Import your activation function
 
-const { Option } = Select;
 const { Search } = Input;
 
+type RingTone = {
+  toneName: string;
+  price: number;
+  toneDescription?: string;
+  _id?: string;
+};
+
 const RingingToneActivation: React.FC = () => {
-  const [filter, setFilter] = useState("all");
+  const [ringingTones, setRingingTones] = useState<RingTone[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const ringingTones = [
-    {
-      name: "Sanda Tharu Mal - Sinhala",
-      description: "A popular Sinhala song to set as your ringtone.",
-      language: "Sinhala",
-      price: 100,
-    },
-    {
-      name: "Shape of You - English",
-      description: "Set Ed Sheeran's hit 'Shape of You' as your ringtone.",
-      language: "English",
-      price: 150,
-    },
-    {
-      name: "Jai Ho - Hindi",
-      description: "Enjoy the energetic vibe of 'Jai Ho' as your ringtone.",
-      language: "Hindi",
-      price: 120,
-    },
-    {
-      name: "Pehli Nazar - Hindi",
-      description: "Romantic Hindi song to make your ringtone.",
-      language: "Hindi",
-      price: 130,
-    },
-  ];
+  useEffect(() => {
+    const fetchRingtoneData = async () => {
+      const data = await getAllRingTonePackages();
+      setRingingTones(data);
+    };
 
-  const handleFilterChange = (value: string) => {
-    setFilter(value);
+    fetchRingtoneData();
+  }, []);
+
+  const filteredTones = ringingTones.filter((tone) =>
+    tone.toneName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleActivate = async (plan: RingTone) => {
+    const toneData = {
+      accountID: "66eda4f8f0d0ef39b09e07d6",
+      durationInDays: 30,
+      toneId: plan._id,
+    };
+    console.log(toneData);
+    try {
+      const response = await activateRingTonePackage(toneData);
+      console.log(response);
+      if (response.statusCode === 201) {
+        message.success(`Activated ringtone: ${response.toneName}`);
+      }
+    } catch (error) {
+      message.error("Failed to activate ringtone.");
+    }
   };
-
-  const filteredTones = ringingTones.filter((tone) => {
-    const matchesLanguage = filter === "all" || tone.language === filter;
-    const matchesSearchTerm =
-      searchTerm === "" || tone.name.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesLanguage && matchesSearchTerm;
-  });
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -57,26 +60,15 @@ const RingingToneActivation: React.FC = () => {
       <div className="p-6">
         <RingingToneHero />
 
-        <h1 className="text-5xl font-bold mb-4 text-center mt-10">Ringing Tones</h1>
+        <h1 className="text-5xl font-bold mb-4 text-center mt-10">
+          Ringing Tones
+        </h1>
         <p className="text-lg mb-8 text-center">
           Select and activate a custom ringtone to express your unique style.
         </p>
 
-        {/* Filter Controls */}
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-5">
-          {/* Language Filter */}
-          <Select
-            defaultValue="all"
-            style={{ width: 200 }}
-            onChange={handleFilterChange}
-          >
-            <Option value="all">All Languages</Option>
-            <Option value="Sinhala">Sinhala</Option>
-            <Option value="English">English</Option>
-            <Option value="Hindi">Hindi</Option>
-          </Select>
-
-          {/* Search by Ringtone Name */}
+        {/* Search by Ringtone Name */}
+        <div className="flex justify-center mb-6">
           <Search
             placeholder="Search by name"
             onSearch={(value) => setSearchTerm(value)}
@@ -86,33 +78,45 @@ const RingingToneActivation: React.FC = () => {
           />
         </div>
 
-        {/* Ringing Tone Cards (Horizontal) */}
         <Row gutter={[16, 16]}>
           {filteredTones.length > 0 ? (
             filteredTones.map((tone, index) => (
-            <Col xs={24} key={index} span={24}>
-              <Card 
-                key={index}
-                className="shadow-lg p-6 pt-3 bg-white rounded-lg">
-                {/* Wrapping the content in a Row to handle the layout */}
-                <Row className="items-center justify-between">
-                  {/* Left side: Ringtone details */}
-                  <Col xs={18}>
-                    <h3 className="text-xl font-bold mb-2">{tone.name}</h3>
-                    <p className="text-gray-600 mb-2">{tone.description}</p>
-                  </Col>
-
-                  {/* Right side: Price and Activate button */}
-                  <Col xs={6} className="text-right">
-                    <p className="text-lg font-semibold mb-4">Rs. {tone.price} <sub className="text-xs text-gray-400">per month</sub></p>
-                    <Button type="primary" className="bg-gray-900">Activate</Button>
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
+              <Col xs={24} key={index} span={24}>
+                <Card className="shadow-lg p-6 pt-3 bg-white rounded-lg">
+                  <Row className="items-center justify-between">
+                    <Col xs={18}>
+                      <h3 className="text-xl font-bold mb-2">
+                        {tone.toneName}
+                      </h3>
+                      <p className="text-gray-600 mb-2">
+                        {tone.toneDescription}
+                      </p>
+                      <p className="text-gray-600 mb-2">
+                        Rs. <span className="font-semibold">{tone.price}</span>{" "}
+                        only
+                      </p>
+                    </Col>
+                    <Col xs={6} className="text-right">
+                      <p className="text-lg font-semibold mb-4">
+                        Rs. {tone.price}{" "}
+                        <sub className="text-xs text-gray-400">per month</sub>
+                      </p>
+                      <Button
+                        type="primary"
+                        className="bg-gray-900"
+                        onClick={() => handleActivate(tone)}
+                      >
+                        Activate
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              </Col>
             ))
           ) : (
-            <p className="text-center w-full">No ringing tones found matching the criteria.</p>
+            <p className="text-center w-full">
+              No ringing tones found matching the criteria.
+            </p>
           )}
         </Row>
       </div>
