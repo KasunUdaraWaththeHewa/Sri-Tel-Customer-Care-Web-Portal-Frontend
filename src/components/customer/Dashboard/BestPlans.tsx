@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button } from "antd";
-import { getAllDataPackages } from "@/app/api/apiCalls/bestPlans";
+import { Card, Button, message } from "antd";
+import {
+  getAllDataPackages,
+  activateDataPackage,
+} from "@/app/api/apiCalls/bestPlans";
 
 type Plan = {
   name: string;
@@ -9,6 +12,7 @@ type Plan = {
   description?: string;
   dataAmount?: number;
   durationInDays?: number;
+  _id?: string;
 };
 
 const BestPlans: React.FC = () => {
@@ -34,6 +38,32 @@ const BestPlans: React.FC = () => {
   if (loading) {
     return <p className="text-center">Loading...</p>;
   }
+
+  const handleActivate = async (plan: Plan) => {
+    const activationData = {
+      accountID: "66eda4f8f0d0ef39b09e07d6",
+      dataAmount: plan.dataAmount,
+      price: plan.price,
+      durationInDays: plan.durationInDays,
+      packageID: plan._id,
+    };
+
+    try {
+      const response = await activateDataPackage(activationData);
+      console.log("Activation Response:", response);
+      if (response.statusCode === 201) {
+        console.log("Package activated successfully:", response);
+        message.success(`Package "${plan.name}" activated successfully!`);
+      } else if (response.statusCode === 200) {
+        message.error(`Package "${plan.name}" is already active!`);
+      }
+    } catch (error) {
+      console.error("Error activating package:", error);
+      message.error(
+        `Failed to activate package "${plan.name}". Please try again.`
+      );
+    }
+  };
 
   return (
     <div className="py-10 px-6">
@@ -82,16 +112,18 @@ const BestPlans: React.FC = () => {
                   </p>
                   <ul className="list-disc list-inside text-sm text-gray-600">
                     {Object.entries(plan.features).map(([key, value]) => (
-                      <li key={key}>
-                        {value}
-                      </li>
+                      <li key={key}>{value}</li>
                     ))}
                   </ul>
                 </div>
               )}
             </div>
             <div className="justify-self-end align-bottom">
-              <Button type="primary" className="w-full bg-gray-900">
+              <Button
+                type="primary"
+                className="w-full bg-gray-900"
+                onClick={() => handleActivate(plan)}
+              >
                 Activate
               </Button>
             </div>
