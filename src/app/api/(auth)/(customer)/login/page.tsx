@@ -30,6 +30,7 @@ const Login = () => {
       const response = await api.post('/user/login', values);
 
       // Handle success response
+      console.log(response);
       if (response.data.success) {
         message.success('Login successful!');
         

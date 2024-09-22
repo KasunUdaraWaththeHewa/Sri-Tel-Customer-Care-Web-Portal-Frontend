@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://bff:4901/api/proxy/forward/value-added";
+const apiUrl = "http://localhost:4901/api/proxy/forward/value-added";
 
 const getToken = () => {
   return localStorage.getItem("token");
@@ -17,8 +17,8 @@ export const getAllActiveDataPackages = async (accountID: string) => {
         },
       }
     );
-    console.log(response.data);
-    return response.data;
+    // console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching active data packages:", error);
     return [];
@@ -33,8 +33,8 @@ export const getAllActiveVoicePackages = async (accountID: string) => {
         Authorization: `${token}`,
       },
     });
-    console.log(response.data);
-    return response.data;
+    // console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching active voice packages:", error);
     return [];
@@ -52,8 +52,8 @@ export const getAllActiveDataTopUps = async (accountID: string) => {
         },
       }
     );
-    console.log(response.data);
-    return response.data;
+    // console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching active data top-ups:", error);
     return [];
@@ -71,7 +71,7 @@ export const isActiveRoaming = async (accountID: string) => {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data.isActive;
   } catch (error) {
     console.error("Error checking roaming status:", error);
@@ -87,8 +87,8 @@ export const getAllActiveTones = async (accountID: string) => {
         Authorization: `${token}`,
       },
     });
-    console.log(response.data);
-    return response.data;
+    // console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching active tones:", error);
     return [];
@@ -106,8 +106,8 @@ export const getAllActiveSubscriptions = async (accountID: string) => {
         },
       }
     );
-    console.log(response.data);
-    return response.data;
+    // console.log(response.data.data);
+    return response.data.data;
   } catch (error) {
     console.error("Error fetching active subscriptions:", error);
     return [];
