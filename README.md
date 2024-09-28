@@ -11,5 +11,5 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3400) with your browser to see the result.
+Open [http://localhost:3400](http://localhost:3400) with your browser to see the result.
 
