@@ -19,8 +19,8 @@ const navItems: NavItem[] = [
 ];
 
 const accountMenuItems = [
-  { label: "0771234567", key: "1" },
-  { label: "0719876543", key: "2" },
+  { label: "0701994053", key: "1" },
+  { label: "0767200335", key: "2" },
   { label: "Add new account", key: "3" }
 ];
 
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
           <Button icon={<UserOutlined />} type="text" className="text-white hover:text-white" onClick={() => window.location.href = '/api/customer/profile'}/>
           <Dropdown overlay={accountMenu}>
             <Button type="text" className="text-white phoneNumber">
-              0771234567 <DownOutlined />
+              0760578952 <DownOutlined />
             </Button>
           </Dropdown>
         </div>
